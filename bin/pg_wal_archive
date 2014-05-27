@@ -1,0 +1,9 @@
+#!/bin/bash
+
+export WAL_ARCHIVE_FILE=$1
+export WAL_ARCHIVE_PATH=$2
+
+echo "Archiving file: ${WAL_ARCHIVE_FILE}"
+echo "Archiving path: ${WAL_ARCHIVE_PATH}"
+
+pg_wal_archive.local
