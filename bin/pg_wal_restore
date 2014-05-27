@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
 
-if system('which pg_wal_restore.local &>/dev/null')
+def local_script_exists?
+  `which pg_wal_restore.local >/dev/null 2>/dev/null`
+  $?.exitstatus == 0
+end
+
+if local_script_exists?
   `pg_wal_restore.local #{ARGV[0]} #{ARGV[1]}`
 end

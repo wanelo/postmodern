@@ -13,6 +13,11 @@ ENV['WAL_ARCHIVE_PATH']=ARGV[1] # maps to %p in postgres archiving
 puts "Archiving file: #{ENV['WAL_ARCHIVE_FILE']}"
 puts "Archiving path: #{ENV['WAL_ARCHIVE_PATH']}"
 
-if system('which pg_wal_archive.local &>/dev/null')
+def local_script_exists?
+  `which pg_wal_archive.local >/dev/null 2>/dev/null`
+  $?.exitstatus == 0
+end
+
+if local_script_exists?
   `pg_wal_archive.local`
 end
