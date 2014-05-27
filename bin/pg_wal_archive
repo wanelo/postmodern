@@ -7,11 +7,13 @@
 # This script (and the local script) should be executable as the
 # postgres user.
 
-ENV['WAL_ARCHIVE_FILE']=ARGV[0] # maps to %f in postgres archiving
-ENV['WAL_ARCHIVE_PATH']=ARGV[1] # maps to %p in postgres archiving
+archive_path = ARGV[0]
+archive_file = ARGV[1]
 
-puts "Archiving file: #{ENV['WAL_ARCHIVE_FILE']}"
-puts "Archiving path: #{ENV['WAL_ARCHIVE_PATH']}"
+ENV['WAL_ARCHIVE_PATH']=archive_path # maps to %p in postgres archiving
+ENV['WAL_ARCHIVE_FILE']=archive_file # maps to %f in postgres archiving
+
+puts "Archiving file: #{archive_file}, path: #{archive_path}"
 
 def local_script_exists?
   `which pg_wal_archive.local >/dev/null 2>/dev/null`
@@ -19,5 +21,5 @@ def local_script_exists?
 end
 
 if local_script_exists?
-  `pg_wal_archive.local`
+  `pg_wal_archive.local #{archive_path} #{archive_file}`
 end

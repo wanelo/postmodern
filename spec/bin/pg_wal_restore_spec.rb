@@ -3,6 +3,15 @@ require 'spec_helper'
 describe 'pg_wal_restore' do
   before do
     double_cmd('pg_wal_restore.local')
+    double_cmd('which')
+  end
+
+  it 'exports second argument as WAL_ARCHIVE_FILE' do
+    expect(`bin/pg_wal_restore filepath filename`).to include('Archiving file: filename')
+  end
+
+  it 'exports first argument as WAL_ARCHIVE_PATH' do
+    expect(`bin/pg_wal_restore filepath filename`).to include('path: filepath')
   end
 
   context 'when local script exists' do

@@ -6,12 +6,12 @@ describe 'pg_wal_archive' do
     double_cmd('which', exit: 1)
   end
 
-  it 'exports WAL_ARCHIVE_FILE' do
-    expect(`bin/pg_wal_archive filename filepath`).to include('Archiving file: filename')
+  it 'exports second argument as WAL_ARCHIVE_FILE' do
+    expect(`bin/pg_wal_archive filepath filename`).to include('Archiving file: filename')
   end
 
-  it 'exports WAL_ARCHIVE_PATH' do
-    expect(`bin/pg_wal_archive filename filepath`).to include('Archiving path: filepath')
+  it 'exports first argument WAL_ARCHIVE_PATH' do
+    expect(`bin/pg_wal_archive filepath filename`).to include('path: filepath')
   end
 
   context 'when local script is present' do
@@ -24,7 +24,7 @@ describe 'pg_wal_archive' do
     it 'calls a local file with file name and path' do
       expect {
         `bin/pg_wal_archive 11111 222222`
-      }.to shellout('pg_wal_archive.local')
+      }.to shellout('pg_wal_archive.local 11111 222222')
     end
   end
 
@@ -38,7 +38,7 @@ describe 'pg_wal_archive' do
     it 'does nothing' do
       expect {
         `bin/pg_wal_archive 11111 222222`
-      }.not_to shellout('pg_wal_archive.local')
+      }.not_to shellout('pg_wal_archive.local 11111 222222')
     end
   end
 end
