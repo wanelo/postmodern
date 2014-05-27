@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 
 # This script is a wrapper for a user-generated pg_wal_archive.local
 # script. If that script does not exist, this executable does nothing
@@ -7,12 +7,12 @@
 # This script (and the local script) should be executable as the
 # postgres user.
 
-export WAL_ARCHIVE_FILE=$1 # maps to %f in postgres archiving
-export WAL_ARCHIVE_PATH=$2 # maps to %p in postgres archiving
+ENV['WAL_ARCHIVE_FILE']=ARGV[0] # maps to %f in postgres archiving
+ENV['WAL_ARCHIVE_PATH']=ARGV[1] # maps to %p in postgres archiving
 
-echo "Archiving file: ${WAL_ARCHIVE_FILE}"
-echo "Archiving path: ${WAL_ARCHIVE_PATH}"
+puts "Archiving file: #{ENV['WAL_ARCHIVE_FILE']}"
+puts "Archiving path: #{ENV['WAL_ARCHIVE_PATH']}"
 
-if which pg_wal_archive.local &>/dev/null; then
-  pg_wal_archive.local
-fi
+if system('which pg_wal_archive.local &>/dev/null')
+  `pg_wal_archive.local`
+end
