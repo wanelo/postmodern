@@ -1,6 +1,8 @@
 Postmodern
 ==========
 
+[![Build Status](https://travis-ci.org/wanelo/postmodern.svg?branch=master)](https://travis-ci.org/wanelo/postmodern)
+
 Tools for managing PostgreSQL databases.
 
 ## Installation
