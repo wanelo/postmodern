@@ -9,6 +9,7 @@ end
 
 group :test do
   gem 'rspec'
+  gem 'aruba-rspec'
   gem 'guard-bundler'
   gem 'guard-rspec'
   gem 'terminal-notifier-guard', require: RUBY_PLATFORM.include?('darwin')
