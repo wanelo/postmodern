@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'pg_wal_archive' do
   before do
     double_cmd('pg_wal_archive.local')
+    double_cmd('which', exit: 1)
   end
 
   it 'exports WAL_ARCHIVE_FILE' do
@@ -13,9 +14,31 @@ describe 'pg_wal_archive' do
     expect(`bin/pg_wal_archive filename filepath`).to include('Archiving path: filepath')
   end
 
-  it 'calls a local file with file name and path' do
-    expect {
-      `bin/pg_wal_archive 11111 222222`
-    }.to shellout('pg_wal_archive.local')
+  context 'when local script is present' do
+    before { double_cmd('which pg_wal_archive.local', exit: 0) }
+
+    it 'succeeds' do
+      expect { `bin/pg_wal_archive 1 2` }.to have_exit_status(0)
+    end
+
+    it 'calls a local file with file name and path' do
+      expect {
+        `bin/pg_wal_archive 11111 222222`
+      }.to shellout('pg_wal_archive.local')
+    end
+  end
+
+  context 'when local script is not present' do
+    before { double_cmd('which pg_wal_archive.local', exit: 1) }
+
+    it 'succeeds' do
+      expect { `bin/pg_wal_archive 1 2` }.to have_exit_status(0)
+    end
+
+    it 'does nothing' do
+      expect {
+        `bin/pg_wal_archive 11111 222222`
+      }.not_to shellout('pg_wal_archive.local')
+    end
   end
 end

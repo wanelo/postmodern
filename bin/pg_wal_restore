@@ -1,3 +1,5 @@
 #!/bin/bash
 
-pg_wal_restore.local $1 $2
+if which pg_wal_restore.local &>/dev/null; then
+  pg_wal_restore.local $1 $2
+fi
