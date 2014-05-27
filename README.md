@@ -43,6 +43,9 @@ ENV['WAL_ARCHIVE_PATH'] = ARGV[0]
 ENV['WAL_ARCHIVE_FILE'] = ARGV[1]
 ```
 
+Local scripts can be written in any language. They should be able access
+the relevant arguments either as $1, $2 or using the variables listed above.
+
 `pg_wal_archive` will attempt to call a `pg_wal_archive.local` script.
 `pg_wal_restore` will attempt to call a `pg_wal_restore.local` script.
 
