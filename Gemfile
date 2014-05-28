@@ -5,6 +5,7 @@ gemspec
 
 group :development do
   gem 'rubocop'
+  gem 'pry-nav'
 end
 
 group :test do
