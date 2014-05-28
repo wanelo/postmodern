@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+
+require 'postmodern/wal'
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: postmodern (archive|restore) <options>"
+
+  opts.on('-f', '--filename FILE', 'File name to archive') do |o|
+    options[:file] = o
+  end
+
+  opts.on('-p', '--path PATH', 'Path name of file to archive') do |o|
+    options[:path] = o
+  end
+end.parse!
+
+Postmodern::WAL.run(ARGV.first, options[:file], options[:path])

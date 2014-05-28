@@ -24,13 +24,13 @@ wrappers for YOUR archiving mechanism.
 In postgresql.conf
 
 ```
-archive_command = 'pg_wal_archive %p %f'
+archive_command = 'postmodern archive --path %p --filename %f'
 ```
 
 In recovery.conf
 
 ```
-restore_command = 'pg_wal_restore %p %f'
+restore_command = 'postmodern restore --path %p --filename %f'
 ```
 
 By default these scripts will do nothing. With the presence of local
@@ -39,15 +39,15 @@ exported to the environment and the local scripts called (with arguments
 preserved):
 
 ```ruby
-ENV['WAL_ARCHIVE_PATH'] = ARGV[0]
-ENV['WAL_ARCHIVE_FILE'] = ARGV[1]
+ENV['WAL_ARCHIVE_PATH'] = path
+ENV['WAL_ARCHIVE_FILE'] = filename
 ```
 
 Local scripts can be written in any language. They should be able access
 the relevant arguments either as $1, $2 or using the variables listed above.
 
-`pg_wal_archive` will attempt to call a `pg_wal_archive.local` script.
-`pg_wal_restore` will attempt to call a `pg_wal_restore.local` script.
+`archive` will attempt to call a `postmodern_archive.local` script.
+`restore` will attempt to call a `postmodern_restore.local` script.
 
 
 ## Contributing
