@@ -6,15 +6,16 @@ module Postmodern
       def initialize(filename, path)
         @filename = filename
         @path = path
-
-        ENV['WAL_ARCHIVE_PATH'] = path
-        ENV['WAL_ARCHIVE_FILE'] = filename
       end
 
       def run
         if local_script_exists?
-          log
-          `#{local_script} #{path} #{filename}`
+          IO.popen("#{local_script} #{path} #{filename}",
+            env: {
+              'WAL_ARCHIVE_PATH' => path,
+              'WAL_ARCHIVE_FILE' => filename,
+              'PATH' => ENV['PATH']
+            })
         end
       end
 
@@ -28,11 +29,6 @@ module Postmodern
       def local_script
         'postmodern_archive.local'
       end
-
-      def log
-        puts "Archiving file: #{filename}, path: #{path}"
-      end
     end
   end
 end
-

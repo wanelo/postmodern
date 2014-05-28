@@ -6,19 +6,10 @@ describe 'postmodern' do
 
     before do
       double_cmd('postmodern_archive.local')
-      double_cmd('which', exit: 0)
-    end
-
-    it 'exports second argument as WAL_ARCHIVE_FILE' do
-      expect(command).to include('Archiving file: filename')
-    end
-
-    it 'exports first argument WAL_ARCHIVE_PATH' do
-      expect(command).to include('path: filepath')
     end
 
     context 'when local script is present' do
-      before { double_cmd('which postmodern_archive.local', exit: 0) }
+      before { double_cmd('which', exit: 0) }
 
       it 'succeeds' do
         expect { command }.to have_exit_status(0)
@@ -30,7 +21,7 @@ describe 'postmodern' do
     end
 
     context 'when local script is not present' do
-      before { double_cmd('which postmodern_archive.local', exit: 1) }
+      before { double_cmd('which', exit: 1) }
 
       it 'succeeds' do
         expect { command }.to have_exit_status(0)
@@ -47,19 +38,10 @@ describe 'postmodern' do
 
     before do
       double_cmd('postmodern_restore.local')
-      double_cmd('which', exit: 0)
-    end
-
-    it 'exports second argument as WAL_restore_FILE' do
-      expect(command).to include('Restoring file: filename')
-    end
-
-    it 'exports first argument WAL_restore_PATH' do
-      expect(command).to include('path: filepath')
     end
 
     context 'when local script is present' do
-      before { double_cmd('which postmodern_restore.local', exit: 0) }
+      before { double_cmd('which', exit: 0) }
 
       it 'succeeds' do
         expect { command }.to have_exit_status(0)
@@ -71,7 +53,7 @@ describe 'postmodern' do
     end
 
     context 'when local script is not present' do
-      before { double_cmd('which postmodern_restore.local', exit: 1) }
+      before { double_cmd('which', exit: 1) }
 
       it 'succeeds' do
         expect { command }.to have_exit_status(0)
