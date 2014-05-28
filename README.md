@@ -5,6 +5,8 @@ Postmodern
 
 Tools for managing PostgreSQL databases.
 
+* WAL archiving and restoration
+
 ## Installation
 
 ```bash
