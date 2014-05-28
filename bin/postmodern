@@ -2,11 +2,12 @@
 
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 
+require 'postmodern/errors'
 require 'postmodern/wal'
 require 'optparse'
 
 options = {}
-OptionParser.new do |opts|
+parser = OptionParser.new do |opts|
   opts.banner = "Usage: postmodern (archive|restore) <options>"
 
   opts.on('-f', '--filename FILE', 'File name to archive') do |o|
@@ -16,6 +17,23 @@ OptionParser.new do |opts|
   opts.on('-p', '--path PATH', 'Path name of file to archive') do |o|
     options[:path] = o
   end
-end.parse!
 
-Postmodern::WAL.run(ARGV.first, options[:file], options[:path])
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+
+  opts.on_tail("--version", "Show version") do
+    require 'postmodern/version'
+    puts Postmodern::VERSION
+    exit
+  end
+end
+parser.parse!
+
+begin
+  Postmodern::WAL.run(ARGV.first, options)
+rescue Postmodern::Error => e
+  puts e.message
+  puts parser.to_s
+end
