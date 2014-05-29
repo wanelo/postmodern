@@ -21,7 +21,10 @@ the system's ruby, however that is installed.
 ### WAL archives
 
 The wal archiving scripts packaged in this gem are intended to serve as
-wrappers for YOUR archiving mechanism.
+wrappers for YOUR archiving mechanism. Changing the settings for WAL
+archiving in `postgresql.conf` or in `recovery.conf` require full restarts
+of PostgreSQL—using Postmodern, you can configure PostgreSQL once and swap
+in local scripts to do the actual work.
 
 In postgresql.conf
 
@@ -50,6 +53,9 @@ the relevant arguments either as $1, $2 or using the variables listed above.
 
 `archive` will attempt to call a `postmodern_archive.local` script.
 `restore` will attempt to call a `postmodern_restore.local` script.
+
+see the [examples](https://github.com/wanelo/postmodern/tree/master/examples)
+directory for example local scripts.
 
 
 ## Contributing

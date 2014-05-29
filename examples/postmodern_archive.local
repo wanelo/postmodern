@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Local file for running postgres wal log archiving.
+# Variables are set by postmodern and map to
+# the following wal archiving conventions:
+#
+#   WAL_ARCHIVE_PATH = %p
+#   WAL_ARCHIVE_FILE = %f
+#
+
+WAL_ARCHIVE_PATH=$1
+WAL_ARCHIVE_FILE=$2
+
+mkdir -p /var/pgsql/wal_archive && find /var/pgsql/wal_archive/ -mtime +1 \
+  | xargs rm -f \
+  && test ! -f /var/pgsql/wal_archive/$WAL_ARCHIVE_FILE \
+  && cp $WAL_ARCHIVE_PATH /var/pgsql/wal_archive/$WAL_ARCHIVE_FILE
