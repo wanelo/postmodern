@@ -13,5 +13,6 @@ group :test do
   gem 'aruba-rspec'
   gem 'guard-bundler'
   gem 'guard-rspec'
+  gem 'timecop'
   gem 'terminal-notifier-guard', require: RUBY_PLATFORM.include?('darwin')
 end

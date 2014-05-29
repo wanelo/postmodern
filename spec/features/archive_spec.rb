@@ -37,7 +37,11 @@ Usage: postmodern (archive|restore) <options>
       end
 
       it 'prints usage' do
-        expect(command).to eq(usage)
+        expect(command).to match(Regexp.escape(usage))
+      end
+
+      it 'includes missing params' do
+        expect(command).to match('Missing path')
       end
     end
 
@@ -49,7 +53,11 @@ Usage: postmodern (archive|restore) <options>
       end
 
       it 'prints usage' do
-        expect(command).to eq(usage)
+        expect(command).to match(Regexp.escape(usage))
+      end
+
+      it 'includes missing params' do
+        expect(command).to match('Missing filename')
       end
     end
   end

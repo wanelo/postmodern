@@ -3,14 +3,14 @@ require 'postmodern/command'
 module Postmodern
   module WAL
     class Archive < Postmodern::Command
-      required_option :file, :path
+      required_option :filename, :path
 
       def parser
         @parser ||= OptionParser.new do |opts|
           opts.banner = "Usage: postmodern (archive|restore) <options>"
 
           opts.on('-f', '--filename FILE', 'File name of xlog') do |o|
-            self.options[:file] = o
+            self.options[:filename] = o
           end
 
           opts.on('-p', '--path PATH', 'Path of xlog file') do |o|
@@ -48,7 +48,7 @@ module Postmodern
       end
 
       def filename
-        @options[:file]
+        @options[:filename]
       end
 
       def local_script_exists?

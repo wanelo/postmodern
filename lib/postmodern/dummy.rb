@@ -15,6 +15,7 @@ module Postmodern
         opts.separator "Available commands:"
         opts.separator "    archive"
         opts.separator "    restore"
+        opts.separator "    vacuum"
         opts.separator ""
         opts.separator "Options:"
 

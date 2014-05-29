@@ -7,6 +7,10 @@ Tools for managing PostgreSQL databases.
 
 * WAL archiving and restoration
 
+## Dependencies
+
+* pg gem
+
 ## Installation
 
 ```bash
@@ -17,6 +21,25 @@ As a system utility, this assumes that you are installing the gem into
 the system's ruby, however that is installed.
 
 ## Usage
+
+### Vacuuming and Vacuum Freezing
+
+Postmodern's vacuum scripts run table by table, with various contraints
+to limit the overhead of the process.
+
+To run a vacuum:
+
+```
+postmodern vacuum -U postgres -p 5432 \
+ -d my_database -d my_other_database
+```
+
+In order to run vacuum freeze:
+
+```
+postmodern freeze -U postgres -p 5432 \
+ -d my_database -d my_other_database
+```
 
 ### WAL archives
 

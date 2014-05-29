@@ -9,6 +9,7 @@ Usage: postmodern <command> <options>
 Available commands:
     archive
     restore
+    vacuum
 
 Options:
     -h, --help                       Show this message

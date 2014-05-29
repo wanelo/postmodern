@@ -12,6 +12,11 @@ describe Postmodern::Runner do
       expect(Postmodern::Runner.command_for('restore')).to be Postmodern::WAL::Restore
     end
 
+
+    it 'chooses vacuumer' do
+      expect(Postmodern::Runner.command_for('vacuum')).to be Postmodern::Vacuum::Vacuum
+    end
+
     it 'defaults to dummy' do
       expect(Postmodern::Runner.command_for('ljfaldf')).to be Postmodern::Dummy
     end

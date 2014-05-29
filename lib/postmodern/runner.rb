@@ -1,5 +1,6 @@
 require 'postmodern/wal/archive'
 require 'postmodern/wal/restore'
+require 'postmodern/vacuum/vacuum'
 require 'postmodern/dummy'
 
 module Postmodern
@@ -9,7 +10,8 @@ module Postmodern
     DEFAULT_COMMAND = Dummy
     COMMAND_MAP = {
       'archive' => WAL::Archive,
-      'restore' => WAL::Restore
+      'restore' => WAL::Restore,
+      'vacuum' => Vacuum::Vacuum
     }.freeze
 
     def self.run(args)

@@ -8,6 +8,7 @@ module Postmodern
 
     def self.required_option(*options)
       required_options.concat(options)
+      required_options.uniq!
     end
 
     def self.default_options
@@ -25,7 +26,7 @@ module Postmodern
     attr_reader :options
 
     def initialize(args)
-      @options = self.class.default_options
+      @options = self.class.default_options.dup
 
       parse_args(args)
       validate!
@@ -35,14 +36,23 @@ module Postmodern
     end
 
     def validate!
-      if (self.class.required_options - self.options.keys).any?
-        puts parser
-        exit 1
+      if missing_params.any?
+        puts "Missing #{missing_params.join(', ')}"
+        usage!
       end
+    end
+
+    def missing_params
+      self.class.required_options - self.options.keys
     end
 
     def parse_args(args)
       parser.parse!(args)
+    end
+
+    def usage!
+      puts parser.to_s
+      exit 1
     end
   end
 end
