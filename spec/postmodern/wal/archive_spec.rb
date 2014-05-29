@@ -6,8 +6,9 @@ describe Postmodern::WAL::Archive do
 
   let(:filename) { "some_file" }
   let(:path) { "/path/to/file" }
+  let(:arguments) { %W(--filename #{filename} --path #{path}) }
 
-  subject(:archiver) { Postmodern::WAL::Archive.new(filename, path) }
+  subject(:archiver) { Postmodern::WAL::Archive.new(arguments) }
 
   describe '#run' do
     let(:expected_command) { "postmodern_archive.local #{path} #{filename}" }

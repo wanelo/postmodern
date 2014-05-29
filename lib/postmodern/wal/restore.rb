@@ -1,8 +1,8 @@
-require_relative 'base'
+require_relative 'archive'
 
 module Postmodern
   module WAL
-    class Restore < Base
+    class Restore < Archive
       private
 
       def local_script

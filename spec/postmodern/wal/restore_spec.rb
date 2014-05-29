@@ -6,8 +6,9 @@ describe Postmodern::WAL::Restore do
 
   let(:filename) { "some_file" }
   let(:path) { "/path/to/file" }
+  let(:arguments) { %W(--filename #{filename} --path #{path}) }
 
-  subject(:restorer) { Postmodern::WAL::Restore.new(filename, path) }
+  subject(:restorer) { Postmodern::WAL::Restore.new(arguments) }
 
   describe '#run' do
     let(:expected_command) { "postmodern_restore.local #{path} #{filename}" }

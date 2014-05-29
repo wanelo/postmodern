@@ -1,5 +1,17 @@
 require 'spec_helper'
 
+describe 'restore help' do
+  it 'responds' do
+    expect(`bin/postmodern restore --help`).to eq <<-END
+Usage: postmodern (archive|restore) <options>
+    -f, --filename FILE              File name of xlog
+    -p, --path PATH                  Path of xlog file
+    -h, --help                       Show this message
+        --version                    Show version
+    END
+  end
+end
+
 describe 'restore' do
   let(:command) { `bin/postmodern restore --path filepath --filename filename` }
 
