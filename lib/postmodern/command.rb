@@ -6,14 +6,26 @@ module Postmodern
       @required_options ||= []
     end
 
-    def parser
-      OptionParser.new
+    def self.required_option(*options)
+      required_options.concat(options)
     end
+
+    def self.default_options
+      @default_options ||= {}
+    end
+
+    def self.default_option(key, value)
+      default_options[key] = value
+    end
+
+   def parser
+     raise "Command needs to define an OptionParser"
+   end
 
     attr_reader :options
 
     def initialize(args)
-      @options = {}
+      @options = self.class.default_options
 
       parse_args(args)
       validate!
@@ -31,7 +43,6 @@ module Postmodern
 
     def parse_args(args)
       parser.parse!(args)
-      self.options
     end
   end
 end

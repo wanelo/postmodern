@@ -3,8 +3,7 @@ require 'postmodern/command'
 module Postmodern
   module WAL
     class Archive < Postmodern::Command
-      required_options << :file
-      required_options << :path
+      required_option :file, :path
 
       def parser
         @parser ||= OptionParser.new do |opts|
