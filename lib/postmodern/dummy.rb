@@ -2,6 +2,11 @@ require 'postmodern/command'
 
 module Postmodern
   class Dummy < Command
+    def run
+      puts parser
+      exit 1
+    end
+
     def parser
       @parser ||= OptionParser.new do |opts|
         opts.banner = "Usage: postmodern <command> <options>"
