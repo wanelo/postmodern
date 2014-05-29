@@ -1,4 +1,5 @@
-require 'postmodern/wal'
+require 'postmodern/wal/archive'
+require 'postmodern/wal/restore'
 require 'postmodern/dummy'
 
 module Postmodern
