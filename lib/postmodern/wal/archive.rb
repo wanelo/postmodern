@@ -38,7 +38,7 @@ module Postmodern
             'WAL_ARCHIVE_PATH' => path,
             'WAL_ARCHIVE_FILE' => filename,
             'PATH' => ENV['PATH']
-          })
+          }) { |f| puts f.gets }
         end
       end
 
