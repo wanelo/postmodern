@@ -1,5 +1,6 @@
 require 'aruba/rspec'
 require 'pry'
+require 'timecop'
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
@@ -16,5 +17,6 @@ RSpec.configure do |config|
 
   config.after :each do
     Aruba::RSpec.teardown
+    Timecop.return
   end
 end

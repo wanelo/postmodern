@@ -138,7 +138,7 @@ ORDER BY dead_pct DESC, table_bytes DESC;
       allow(command).to receive(:tables_to_vacuum).and_return(tables_to_vacuum)
     end
 
-    let(:tables_to_vacuum) { ["table1", "table2", "table3"] }
+    let(:tables_to_vacuum) { %w(table1 table2 table3) }
 
     it "vacuums each table" do
       command.vacuum
