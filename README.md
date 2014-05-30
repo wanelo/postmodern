@@ -25,8 +25,27 @@ the system's ruby, however that is installed.
 
 ### Vacuuming and Vacuum Freezing
 
-Postmodern's vacuum scripts run table by table, with various contraints
+Postmodern's vacuum scripts run table by table, with various constraints
 to limit the overhead of the process.
+
+```
+Usage: postmodern (vacuum|freeze) <options>
+    -U, --user USER                  Defaults to postgres
+    -p, --port PORT                  Defaults to 5432
+    -H, --host HOST                  Defaults to 127.0.0.1
+    -W, --password PASS
+
+    -t, --timeout TIMEOUT            Halt after timeout minutes -- default 120
+    -d, --database DB                Database to vacuum. Required.
+
+    -B, --tablesize BYTES            minimum table size to vacuum -- default 1000000
+    -F, --freezeage AGE              minimum freeze age -- default 10000000
+    -D, --costdelay DELAY            vacuum_cost_delay setting in ms -- default 20
+    -L, --costlimit LIMIT            vacuum_cost_limit setting -- default 2000
+
+    -h, --help                       Show this message
+        --version                    Show version
+```
 
 To run a vacuum:
 
@@ -52,6 +71,14 @@ wrappers for YOUR archiving mechanism. Changing the settings for WAL
 archiving in `postgresql.conf` or in `recovery.conf` require full restarts
 of PostgreSQL—using Postmodern, you can configure PostgreSQL once and swap
 in local scripts to do the actual work.
+
+```
+Usage: postmodern (archive|restore) <options>
+    -f, --filename FILE              File name of xlog
+    -p, --path PATH                  Path of xlog file
+    -h, --help                       Show this message
+        --version                    Show version
+```
 
 In postgresql.conf
 
@@ -84,6 +111,10 @@ the relevant arguments either as $1, $2 or using the variables listed above.
 see the [examples](https://github.com/wanelo/postmodern/tree/master/examples)
 directory for example local scripts.
 
+## Attribution & Thanks
+
+Please see the [attribution](https://github.com/wanelo/postmodern/blob/master/ATTRIBUTION.md)
+file for proper attribution and thanks.
 
 ## Contributing
 
