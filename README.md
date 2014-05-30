@@ -123,3 +123,13 @@ file for proper attribution and thanks.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+Contributions will not be accepted without tests. What should be a
+feature and what a unit test is highly open to interpretation, however.
+In some cases, a unit test may be easier and acceptable. In general,
+at least one feature should be written for each new subcommand, even
+if it just runs `--help`.
+
+If in doubt, open an issue. If you don't receive a response to an issue
+or a pull request, please mention one of the core committers of this
+gem in a comment to make sure it doesn't get swallowed in an email abyss.
