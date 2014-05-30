@@ -71,6 +71,10 @@ module Postmodern
             exit
           end
 
+          opts.on_tail("-n", "--dry-run", "Perform dry-run, do not vacuum.") do
+            self.options[:dryrun] = true
+          end
+
           opts.on_tail("--version", "Show version") do
             require 'postmodern/version'
             puts Postmodern::VERSION
@@ -99,7 +103,7 @@ module Postmodern
       def vacuum
         tables_to_vacuum.each do |table|
           Postmodern.logger.info "Vacuuming #{table}"
-          adapter.execute(vacuum_statement(table))
+          adapter.execute(vacuum_statement(table)) unless dryrun?
           if timedout?
             Postmodern.logger.warn "Vacuuming timed out"
             break
@@ -113,6 +117,10 @@ module Postmodern
 
       def timedout?
         Time.now >= start_time + (options[:timeout].to_i * 60)
+      end
+
+      def dryrun?
+        !!options[:dryrun]
       end
 
       def tables_to_vacuum

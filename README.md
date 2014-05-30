@@ -44,6 +44,7 @@ Usage: postmodern (vacuum|freeze) <options>
     -L, --costlimit LIMIT            vacuum_cost_limit setting -- default 2000
 
     -h, --help                       Show this message
+    -n, --dry-run                    Perform dry-run, do not vacuum.
         --version                    Show version
 ```
 

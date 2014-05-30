@@ -141,6 +141,14 @@ ORDER BY dead_pct DESC, table_bytes DESC;
 
     let(:tables_to_vacuum) { %w(table1 table2 table3) }
 
+    context 'dry run' do
+      let(:args) { %w(-d db --dry-run) }
+      it 'does not actually execute vacuum' do
+        command.vacuum
+        expect(adapter).not_to have_received(:execute)
+      end
+    end
+
     it "vacuums each table" do
       command.vacuum
       tables_to_vacuum.each do |table|
@@ -154,6 +162,24 @@ ORDER BY dead_pct DESC, table_bytes DESC;
       expect(adapter).to have_received(:execute).with("VACUUM ANALYZE %s" % tables_to_vacuum[0])
       expect(adapter).not_to have_received(:execute).with("VACUUM ANALYZE %s" % tables_to_vacuum[1])
       expect(adapter).not_to have_received(:execute).with("VACUUM ANALYZE %s" % tables_to_vacuum[2])
+    end
+  end
+
+  describe '#dryrun?' do
+    context 'with --dry-run' do
+      let(:args) { %w(-d db --dry-run) }
+
+      it 'is true' do
+        expect(subject.dryrun?).to be true
+      end
+    end
+
+    context 'without --dry-run' do
+      let(:args) { %w(-d db) }
+
+      it 'is false' do
+        expect(command.dryrun?).to be false
+      end
     end
   end
 
