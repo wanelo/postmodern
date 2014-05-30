@@ -2,26 +2,33 @@ require 'optparse'
 
 module Postmodern
   class Command
-    def self.required_options
-      @required_options ||= []
+    class << self
+      def inherited(subclass)
+        subclass.instance_variable_set(:@required_options, @required_options)
+        subclass.instance_variable_set(:@default_options, @default_options)
+      end
+
+      def required_options
+        @required_options ||= []
+      end
+
+      def required_option(*options)
+        required_options.concat(options)
+        required_options.uniq!
+      end
+
+      def default_options
+        @default_options ||= {}
+      end
+
+      def default_option(key, value)
+        default_options[key] = value
+      end
     end
 
-    def self.required_option(*options)
-      required_options.concat(options)
-      required_options.uniq!
+    def parser
+      raise "Command needs to define an OptionParser"
     end
-
-    def self.default_options
-      @default_options ||= {}
-    end
-
-    def self.default_option(key, value)
-      default_options[key] = value
-    end
-
-   def parser
-     raise "Command needs to define an OptionParser"
-   end
 
     attr_reader :options
 
