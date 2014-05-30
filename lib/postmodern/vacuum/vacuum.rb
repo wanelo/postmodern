@@ -109,6 +109,7 @@ module Postmodern
             break
           end
         end
+        Postmodern.logger.info "Vacuuming finished"
       end
 
       def vacuum_statement table_name
