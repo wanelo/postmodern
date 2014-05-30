@@ -9,7 +9,8 @@ Tools for managing PostgreSQL databases.
 
 ## Dependencies
 
-* pg gem
+* libpq
+* [pg gem](http://rubygems.org/gems/pg)
 
 ## Installation
 
@@ -30,16 +31,19 @@ to limit the overhead of the process.
 To run a vacuum:
 
 ```
-postmodern vacuum -U postgres -p 5432 \
- -d my_database -d my_other_database
+postmodern vacuum -U postgres -p 5432 -d my_database
 ```
 
 In order to run vacuum freeze:
 
 ```
-postmodern freeze -U postgres -p 5432 \
- -d my_database -d my_other_database
+postmodern freeze -U postgres -p 5432 -d my_database
 ```
+
+These tasks are designed to be run regularly during a window of lower
+database activity. They vacuum or vacuum freeze each table that requires
+it (based on command line options). Before each operation, the scripts check
+to make sure they have not gone longer than `--timeout` seconds.
 
 ### WAL archives
 
