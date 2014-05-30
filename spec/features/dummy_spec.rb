@@ -10,6 +10,7 @@ Available commands:
     archive
     restore
     vacuum
+    freeze
 
 Options:
     -h, --help                       Show this message

@@ -16,6 +16,7 @@ module Postmodern
         opts.separator "    archive"
         opts.separator "    restore"
         opts.separator "    vacuum"
+        opts.separator "    freeze"
         opts.separator ""
         opts.separator "Options:"
 
