@@ -8,6 +8,7 @@ describe Postmodern::Vacuum::Vacuum do
   subject(:command) { Postmodern::Vacuum::Vacuum.new(args) }
 
   before do
+    allow(Postmodern).to receive(:logger).and_return(FakeLogger.new)
     allow(adapter).to receive(:execute)
   end
 

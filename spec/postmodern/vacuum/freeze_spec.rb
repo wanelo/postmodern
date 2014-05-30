@@ -7,6 +7,7 @@ describe Postmodern::Vacuum::Freeze do
   subject(:command) { Postmodern::Vacuum::Freeze.new(args) }
 
   before do
+    allow(Postmodern).to receive(:logger).and_return(FakeLogger.new)
     allow(adapter).to receive(:execute)
     allow(command).to receive(:adapter).and_return(adapter)
   end

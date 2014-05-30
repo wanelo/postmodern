@@ -1,3 +1,4 @@
+require 'postmodern'
 require 'postmodern/wal/archive'
 require 'postmodern/wal/restore'
 require 'postmodern/vacuum/vacuum'

@@ -98,9 +98,10 @@ module Postmodern
 
       def vacuum
         tables_to_vacuum.each do |table|
+          Postmodern.logger.info "Vacuuming #{table}"
           adapter.execute(vacuum_statement(table))
           if timedout?
-            puts "Vacuuming timed out"
+            Postmodern.logger.warn "Vacuuming timed out"
             break
           end
         end
