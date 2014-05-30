@@ -147,7 +147,7 @@ ORDER BY dead_pct DESC, table_bytes DESC;
       end
     end
 
-    it "exits prematurly with a timeout and anlazyses first table" do
+    it "exits prematurely with a timeout and analyzes first table" do
       allow(command).to receive(:timedout?).and_return(true)
       command.vacuum
       expect(adapter).to have_received(:execute).with("VACUUM ANALYZE %s" % tables_to_vacuum[0])
