@@ -4,4 +4,6 @@ $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 
 require 'postmodern/runner'
 
+trap("SIGINT") { exit! 130 }
+
 Postmodern::Runner.run(ARGV)
