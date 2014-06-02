@@ -47,6 +47,7 @@ LIMIT 1000;
     before do
       allow(Postmodern::DB::Adapter).to receive(:new).and_return(adapter)
       allow(command).to receive(:tables_to_vacuum).and_return(tables_to_vacuum)
+      allow(command).to receive(:pause)
     end
 
     it "vacuums each table" do

@@ -10,6 +10,7 @@ Usage: postmodern (vacuum|freeze) <options>
     -W, --password PASS
 
     -t, --timeout TIMEOUT            Halt after timeout minutes -- default 120
+    -P, --pause PAUSE                Pause (minutes) after each table vacuum -- default 10
     -d, --database DB                Database to vacuum. Required.
 
     -B, --tablesize BYTES            minimum table size to vacuum -- default 1000000

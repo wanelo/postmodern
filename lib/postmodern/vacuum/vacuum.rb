@@ -42,6 +42,10 @@ module Postmodern
             self.options[:timeout] = opt
           end
 
+          opts.on('-P', '--pause PAUSE', 'Pause (minutes) after each table vacuum -- default 10') do |opt|
+            self.options[:pause] = opt
+          end
+
           opts.on('-d', '--database DB', 'Database to vacuum. Required.') do |opt|
             self.options[:database] = opt
           end
@@ -101,13 +105,15 @@ module Postmodern
       end
 
       def vacuum
-        tables_to_vacuum.each do |table|
+        tables_to_vacuum_size = tables_to_vacuum.size
+        tables_to_vacuum.each_with_index do |table,index|
           Postmodern.logger.info "Vacuuming #{table}"
           adapter.execute(vacuum_statement(table)) unless dryrun?
           if timedout?
             Postmodern.logger.warn "Vacuuming timed out"
             break
           end
+          pause unless index == tables_to_vacuum_size - 1
         end
         Postmodern.logger.info "Vacuuming finished"
       end
@@ -118,6 +124,12 @@ module Postmodern
 
       def timedout?
         Time.now >= start_time + (options[:timeout].to_i * 60)
+      end
+
+      def pause
+        pause_time = options[:pause].to_i * 60
+        Postmodern.logger.info "Pausing before next vacuum for #{pause_time} minutes."
+        sleep(pause_time) unless dryrun?
       end
 
       def dryrun?

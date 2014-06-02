@@ -36,6 +36,7 @@ Usage: postmodern (vacuum|freeze) <options>
     -W, --password PASS
 
     -t, --timeout TIMEOUT            Halt after timeout minutes -- default 120
+    -P, --pause PAUSE                Pause (minutes) after each table vacuum -- default 10
     -d, --database DB                Database to vacuum. Required.
 
     -B, --tablesize BYTES            minimum table size to vacuum -- default 1000000
@@ -64,6 +65,11 @@ These tasks are designed to be run regularly during a window of lower
 database activity. They vacuum or vacuum freeze each table that requires
 it (based on command line options). Before each operation, the scripts check
 to make sure they have not gone longer than `--timeout` seconds.
+
+`--pause` is useful to allow I/O-bound replicas to catch up on replication
+before starting new vacuum events. When vacuuming large tables with many
+dead tuples, a lot of changes need to be sent to replicas. When using replicas
+with spinning disks, this can saturate the I/O of the disk array.
 
 ### WAL archives
 

@@ -50,13 +50,14 @@ describe Postmodern::Vacuum::Vacuum do
     let(:args) { %w(--database mydb) }
 
     before do
-      allow(command).to receive(:adapter).and_return(adapter)
+      allow(command).to receive(:configure_vacuum_cost)
+      allow(command).to receive(:vacuum)
     end
 
     it 'executes vacuum operations in order' do
-      expect(command).to receive(:configure_vacuum_cost).once
-      expect(command).to receive(:vacuum).once
       command.run
+      expect(command).to have_received(:configure_vacuum_cost).once
+      expect(command).to have_received(:vacuum).once
     end
   end
 
@@ -109,8 +110,8 @@ describe Postmodern::Vacuum::Vacuum do
 
     it 'finds list of tables to vacuum' do
       result = [
-        { 'full_table_name' => 'table1'},
-        { 'full_table_name' => 'table2'},
+        {'full_table_name' => 'table1'},
+        {'full_table_name' => 'table2'},
       ]
       allow(command).to receive(:adapter).and_return(adapter)
       expect(adapter).to receive(:execute).with(%Q{WITH deadrow_tables AS (
@@ -137,6 +138,7 @@ ORDER BY dead_pct DESC, table_bytes DESC;
     before do
       allow(Postmodern::DB::Adapter).to receive(:new).and_return(adapter)
       allow(command).to receive(:tables_to_vacuum).and_return(tables_to_vacuum)
+      allow(command).to receive(:pause)
     end
 
     let(:tables_to_vacuum) { %w(table1 table2 table3) }
@@ -163,6 +165,11 @@ ORDER BY dead_pct DESC, table_bytes DESC;
       expect(adapter).not_to have_received(:execute).with("VACUUM ANALYZE %s" % tables_to_vacuum[1])
       expect(adapter).not_to have_received(:execute).with("VACUUM ANALYZE %s" % tables_to_vacuum[2])
     end
+
+    it 'pauses between each vacuum' do
+      command.vacuum
+      expect(command).to have_received(:pause).exactly(2).times
+    end
   end
 
   describe '#dryrun?' do
@@ -179,6 +186,29 @@ ORDER BY dead_pct DESC, table_bytes DESC;
 
       it 'is false' do
         expect(command.dryrun?).to be false
+      end
+    end
+  end
+
+  describe '#pause' do
+    let(:time) { Time.now }
+    let(:args) { %w(--d db -P 30) }
+
+    before do
+      allow(command).to receive(:sleep)
+    end
+
+    it "Should sleep for specified time" do
+      command.pause
+      expect(command).to have_received(:sleep).with(30 * 60).once
+    end
+
+    context 'during dry-run' do
+      let(:args) { %w(--d db -P 30 --dry-run) }
+
+      it "Should not sleep during dry-run" do
+        command.pause
+        expect(command).not_to have_received(:sleep)
       end
     end
   end
