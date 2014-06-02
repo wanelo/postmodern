@@ -128,7 +128,7 @@ module Postmodern
 
       def pause
         pause_time = options[:pause].to_i * 60
-        Postmodern.logger.info "Pausing before next vacuum for #{pause_time} minutes."
+        Postmodern.logger.info "Pausing before next vacuum for #{options[:pause]} minutes."
         sleep(pause_time) unless dryrun?
       end
 
