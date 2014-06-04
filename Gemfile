@@ -9,8 +9,8 @@ group :development do
 end
 
 group :test do
-  gem 'rspec'
-  gem 'aruba-rspec'
+  gem 'rspec', '>= 3.0.0'
+  gem 'aruba-rspec', '>= 1.0.0'
   gem 'guard-bundler'
   gem 'guard-rspec'
   gem 'timecop'
