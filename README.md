@@ -5,6 +5,7 @@ Postmodern
 
 Tools for managing PostgreSQL databases.
 
+* Vacuum and Vacuum freeze tasks
 * WAL archiving and restoration
 
 ## Dependencies
