@@ -2,13 +2,20 @@ require 'spec_helper'
 require 'postmodern/wal/archive'
 
 describe Postmodern::WAL::Archive do
-  before { allow(IO).to receive(:popen) }
+  let(:stdout) { double(to_s: '') }
+  let(:stderr) { double(to_s: '') }
+  let(:status) { double(exitstatus: 0) }
 
   let(:filename) { "some_file" }
   let(:path) { "/path/to/file" }
   let(:arguments) { %W(--filename #{filename} --path #{path}) }
 
   subject(:archiver) { Postmodern::WAL::Archive.new(arguments) }
+
+  before do
+    allow(Open3).to receive(:capture3).and_return([stdout, stderr, status])
+    allow(archiver).to receive(:exit)
+  end
 
   describe '#run' do
     let(:expected_command) { "postmodern_archive.local #{path} #{filename}" }
@@ -18,12 +25,13 @@ describe Postmodern::WAL::Archive do
 
       it 'executes postmodern_archive.local with filename and path' do
         archiver.run
-        expect(IO).to have_received(:popen).with(expected_command, env:
+        expect(Open3).to have_received(:capture3).with(
           {
             'WAL_ARCHIVE_PATH' => path,
             'WAL_ARCHIVE_FILE' => filename,
             'PATH' => anything
-          }
+          },
+          expected_command
         )
       end
     end
@@ -33,7 +41,7 @@ describe Postmodern::WAL::Archive do
 
       it 'executes postmodern_archive.local with filename and path' do
         archiver.run
-        expect(IO).not_to have_received(:popen)
+        expect(Open3).not_to have_received(:capture3)
       end
     end
   end

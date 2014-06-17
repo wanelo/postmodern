@@ -1,4 +1,5 @@
 require 'postmodern/command'
+require 'open3'
 
 module Postmodern
   module WAL
@@ -32,12 +33,10 @@ module Postmodern
 
       def run
         if local_script_exists?
-          IO.popen("#{local_script} #{path} #{filename}",
-                   env: {
-            'WAL_ARCHIVE_PATH' => path,
-            'WAL_ARCHIVE_FILE' => filename,
-            'PATH' => ENV['PATH']
-          }) { |f| puts f.gets }
+          stdout, stderr, status = Open3.capture3(script_env, "#{local_script} #{path} #{filename}")
+          $stdout.print stdout
+          $stderr.print stderr
+          exit status.exitstatus
         end
       end
 
@@ -57,6 +56,14 @@ module Postmodern
 
       def local_script
         'postmodern_archive.local'
+      end
+
+      def script_env
+        {
+          'WAL_ARCHIVE_PATH' => path,
+          'WAL_ARCHIVE_FILE' => filename,
+          'PATH' => ENV['PATH']
+        }
       end
     end
   end
