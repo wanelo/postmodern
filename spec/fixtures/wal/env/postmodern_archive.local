@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "WAL_ARCHIVE_PATH: ${WAL_ARCHIVE_PATH}"
+echo "WAL_ARCHIVE_FILE: ${WAL_ARCHIVE_FILE}"
+
+exit ${EXITSTATUS:-0}
