@@ -24,7 +24,7 @@ module Postmodern
             self.options[:user] = opt
           end
 
-          opts.on('-p', '--port PORT', 'Defaults to 5432') do |opt|
+          opts.on('-p', '--port PORT', Integer, 'Defaults to 5432') do |opt|
             self.options[:port] = opt
           end
 
@@ -38,11 +38,11 @@ module Postmodern
 
           opts.separator ''
 
-          opts.on('-t', '--timeout TIMEOUT', 'Halt after timeout minutes -- default 120') do |opt|
+          opts.on('-t', '--timeout TIMEOUT', Integer, 'Halt after timeout minutes -- default 120') do |opt|
             self.options[:timeout] = opt
           end
 
-          opts.on('-P', '--pause PAUSE', 'Pause (minutes) after each table vacuum -- default 10') do |opt|
+          opts.on('-P', '--pause PAUSE', Integer, 'Pause (minutes) after each table vacuum -- default 10') do |opt|
             self.options[:pause] = opt
           end
 
@@ -52,19 +52,19 @@ module Postmodern
 
           opts.separator ''
 
-          opts.on('-B', '--tablesize BYTES', 'minimum table size to vacuum -- default 1000000') do |opt|
+          opts.on('-B', '--tablesize BYTES', Integer, 'minimum table size to vacuum -- default 1000000') do |opt|
             self.options[:tablesize] = opt
           end
 
-          opts.on('-F', '--freezeage AGE', 'minimum freeze age -- default 10000000') do |opt|
+          opts.on('-F', '--freezeage AGE', Integer, 'minimum freeze age -- default 10000000') do |opt|
             self.options[:freezeage] = opt
           end
 
-          opts.on('-D', '--costdelay DELAY', 'vacuum_cost_delay setting in ms -- default 20') do |opt|
+          opts.on('-D', '--costdelay DELAY', Integer, 'vacuum_cost_delay setting in ms -- default 20') do |opt|
             self.options[:costdelay] = opt
           end
 
-          opts.on('-L', '--costlimit LIMIT', 'vacuum_cost_limit setting -- default 2000') do |opt|
+          opts.on('-L', '--costlimit LIMIT', Integer, 'vacuum_cost_limit setting -- default 2000') do |opt|
             self.options[:costlimit] = opt
           end
 
