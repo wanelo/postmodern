@@ -106,7 +106,7 @@ describe Postmodern::Vacuum::Vacuum do
   end
 
   describe '#tables_to_vacuum' do
-    let(:args) { %w(-d mydb -B 12345) }
+    let(:args) { %w(-d mydb -B 12345 -r 0.12345) }
 
     it 'finds list of tables to vacuum' do
       result = [
@@ -125,7 +125,7 @@ describe Postmodern::Vacuum::Vacuum do
 )
 SELECT full_table_name
 FROM deadrow_tables
-WHERE dead_pct > 0.05
+WHERE dead_pct > 0.12345
 AND table_bytes > 12345
 ORDER BY dead_pct DESC, table_bytes DESC;
 }).and_return(result)

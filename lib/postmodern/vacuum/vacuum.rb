@@ -52,6 +52,10 @@ module Postmodern
 
           opts.separator ''
 
+          opts.on('-r', '--ratio RATIO', Float, 'minimum dead tuple ratio to vacuum -- default 0.05') do |opt|
+            self.options[:ratio] = opt
+          end
+
           opts.on('-B', '--tablesize BYTES', Integer, 'minimum table size to vacuum -- default 1000000') do |opt|
             self.options[:tablesize] = opt
           end
@@ -166,7 +170,7 @@ module Postmodern
         )
         SELECT full_table_name
         FROM deadrow_tables
-        WHERE dead_pct > 0.05
+        WHERE dead_pct > #{options[:ratio]}
         AND table_bytes > #{options[:tablesize]}
         ORDER BY dead_pct DESC, table_bytes DESC;
         SQL

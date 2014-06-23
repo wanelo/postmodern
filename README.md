@@ -40,6 +40,7 @@ Usage: postmodern (vacuum|freeze) <options>
     -P, --pause PAUSE                Pause (minutes) after each table vacuum -- default 10
     -d, --database DB                Database to vacuum. Required.
 
+    -r, --ratio RATIO                minimum dead tuple ratio to vacuum -- default 0.05
     -B, --tablesize BYTES            minimum table size to vacuum -- default 1000000
     -F, --freezeage AGE              minimum freeze age -- default 10000000
     -D, --costdelay DELAY            vacuum_cost_delay setting in ms -- default 20
