@@ -19,6 +19,7 @@ describe Postmodern::Vacuum::Vacuum do
       host: '127.0.0.1',
       timeout: 120,
       pause: 10,
+      ratio: 0.05,
       tablesize: 1000000,
       freezeage: 10000000,
       costdelay: 20,

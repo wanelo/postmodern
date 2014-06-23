@@ -6,6 +6,7 @@ module Postmodern
     class Vacuum < Postmodern::Command
       default_option :timeout, 120
       default_option :pause, 10
+      default_option :ratio, 0.05
       default_option :tablesize, 1000000
       default_option :freezeage, 10000000
       default_option :costdelay, 20
