@@ -107,6 +107,7 @@ module Postmodern
       def configure_vacuum_cost
         adapter.execute("SET vacuum_cost_delay = '%d ms'" % options[:costdelay])
         adapter.execute("SET vacuum_cost_limit = '%d'" % options[:costlimit])
+        adapter.execute("SET statement_timeout = 0")
       end
 
       def vacuum
