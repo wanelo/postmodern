@@ -20,7 +20,7 @@ module Postmodern
     def self.run(args)
       command_for(args.first).new(args).run
     end
-    
+
     def self.command_for(command)
       COMMAND_MAP[command] || DEFAULT_COMMAND
     end

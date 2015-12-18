@@ -8,7 +8,7 @@ module Postmodern
       def local_script
         'postmodern_restore.local'
       end
-      
+
       def log
         puts "Restoring file: #{filename}, path: #{path}"
       end
