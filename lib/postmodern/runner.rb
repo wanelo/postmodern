@@ -1,4 +1,5 @@
 require 'postmodern'
+require 'postmodern/backup/backup'
 require 'postmodern/wal/archive'
 require 'postmodern/wal/restore'
 require 'postmodern/vacuum/vacuum'
@@ -11,6 +12,7 @@ module Postmodern
 
     DEFAULT_COMMAND = Dummy
     COMMAND_MAP = {
+      'backup' => Backup::Backup,
       'archive' => WAL::Archive,
       'restore' => WAL::Restore,
       'vacuum' => Vacuum::Vacuum,

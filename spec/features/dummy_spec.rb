@@ -7,6 +7,7 @@ describe 'dummy' do
 Usage: postmodern <command> <options>
 
 Available commands:
+    backup
     archive
     restore
     vacuum
