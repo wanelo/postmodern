@@ -5,8 +5,9 @@ require 'open3'
 module Postmodern
   module Backup
     class Backup < Postmodern::Command
-      required_option :data_directory, :directory, :host, :name
+      required_option :directory, :host, :name
       default_option :user, 'postgres'
+      default_option :port, 5432
       default_option :pigz, false
       default_option :concurrency, 4
 
@@ -23,16 +24,16 @@ module Postmodern
             self.options[:user] = o
           end
 
-          opts.on('-D', '--data-directory DIRECTORY', 'Name of data directory (eg: data93, data94) (required)') do |o|
-            self.options[:data_directory] = o
-          end
-
           opts.on('-d', '--directory DIRECTORY', 'Local directory to put backups (required)') do |o|
             self.options[:directory] = o
           end
 
-          opts.on('-H', '--host HOST', 'Host of database master (eg: fqdn, IP) (required)') do |o|
+          opts.on('-H', '--host HOST', 'Host of database (eg: fqdn, IP) (required)') do |o|
             self.options[:host] = o
+          end
+
+          opts.on('-p', '--port PORT', 'Port of database (default: 5432)') do |o|
+            self.options[:port] = o
           end
 
           opts.on('-n', '--name NAME', 'Name of backup (required)') do |o|
@@ -66,10 +67,6 @@ module Postmodern
 
       # option wrappers
 
-      def data_directory
-        @options[:data_directory]
-      end
-
       def directory
         @options[:directory]
       end
@@ -80,6 +77,10 @@ module Postmodern
 
       def name
         @options[:name]
+      end
+
+      def port
+        @options[:port]
       end
 
       def user
@@ -98,7 +99,7 @@ module Postmodern
       end
 
       def basebackup_command
-        "pg_basebackup --checkpoint=fast -F tar -D - -U #{user} -h #{host} | #{archive_command} > #{archive_file}"
+        "pg_basebackup --checkpoint=fast -F tar -D - -U #{user} -h #{host} -p #{port} | #{archive_command} > #{archive_file}"
       end
 
       def current_date
@@ -106,10 +107,11 @@ module Postmodern
       end
 
       def run_basebackup
-        $stderr.puts "Creating basebackup: #{host}"
+        $stderr.puts "[#{Time.now.utc}] Creating basebackup: #{host}"
         stdout, stderr, status = Open3.capture3(script_env, basebackup_command)
         $stdout.print stdout
         $stderr.print stderr
+        $stderr.puts "[#{Time.now.utc}] Finished basebackup: #{host}"
         exit status.exitstatus
       end
 

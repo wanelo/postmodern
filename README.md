@@ -24,6 +24,36 @@ the system's ruby, however that is installed.
 
 ## Usage
 
+### Backup
+
+Backup all databases in a Postgres instance using `pg_basebackup`. This assumes that
+there are no additional tablespaces (see the documentation on
+`pg_basebackup`).
+
+```
+Usage: postmodern backup <options>
+
+Creates a gzipped archive of a pg_basebackup, with file name:
+  NAME.basebackup.CURRENTDATE.tar.gz
+
+    -U, --user USER                  Postgres user (default: "postgres")
+    -d, --directory DIRECTORY        Local directory to put backups (required)
+    -H, --host HOST                  Host of database (eg: fqdn, IP) (required)
+    -p, --port PORT                  Port of database (default: 5432)
+    -n, --name NAME                  Name of backup (required)
+        --pigz CONCURRENCY           Use pigz with concurrency CONCURRENCY
+    -h, --help                       Show this message
+        --version                    Show version
+```
+
+`CURRENTDATE` will be in the format `YYYYMMDD`, and will be the contents of the
+Postgres data directory of the backed-up instance. When restoring from
+these backups, note that it should be untarred directly into a new data
+directory. For instance, if Postgres on the restored hosts is configured
+with a data directory of `/var/pgsql/data94`, then the archive should be
+untarred within `/var/pgsql/data94`, not in the parent directory.
+
+
 ### Vacuuming and Vacuum Freezing
 
 Postmodern's vacuum scripts run table by table, with various constraints

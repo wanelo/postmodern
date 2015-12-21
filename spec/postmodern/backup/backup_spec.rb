@@ -6,13 +6,13 @@ describe Postmodern::Backup::Backup do
   let(:stderr) { double(to_s: '') }
   let(:status) { double(exitstatus: 0) }
 
-  let(:data_directory) { 'data94' }
   let(:directory) { '/tmp/pg_backup' }
   let(:user) { 'pg' }
   let(:host) { '127.0.0.1' }
   let(:name) { 'host.com' }
+  let(:port) { 5433 }
   let(:current_date) { Time.now.strftime('%Y%m%d') }
-  let(:arguments) { %W(--data-directory #{data_directory} --user #{user} --directory #{directory} --host #{host} --name #{name}) }
+  let(:arguments) { %W(--user #{user} --directory #{directory} --host #{host} --name #{name} --port #{port}) }
 
   subject(:backup) { Postmodern::Backup::Backup.new(arguments) }
 
@@ -23,7 +23,7 @@ describe Postmodern::Backup::Backup do
   end
 
   describe '#run' do
-    let(:backup_command) { "pg_basebackup --checkpoint=fast -F tar -D - -U #{user} -h #{host}" }
+    let(:backup_command) { "pg_basebackup --checkpoint=fast -F tar -D - -U #{user} -h #{host} -p #{port}" }
 
     it 'archives the data directory with gzip' do
       backup.run
@@ -36,7 +36,7 @@ describe Postmodern::Backup::Backup do
     end
 
     context 'with --pigz' do
-      let(:arguments) { %W(-D #{data_directory} -U #{user} -d #{directory} -H #{host} -n #{name} --pigz 12) }
+      let(:arguments) { %W(-U #{user} -d #{directory} -H #{host} -n #{name} -p #{port} --pigz 12) }
 
       it 'archives the data directory with pigz' do
         backup.run
