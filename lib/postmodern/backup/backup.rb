@@ -5,10 +5,10 @@ require 'open3'
 module Postmodern
   module Backup
     class Backup < Postmodern::Command
-      attr_accessor :exit_status
       required_option :data_directory, :directory, :host, :name
       default_option :user, 'postgres'
       default_option :pigz, false
+      default_option :concurrency, 4
 
       def parser
         @parser ||= OptionParser.new do |opts|
@@ -57,63 +57,17 @@ module Postmodern
         end
       end
 
-      def initialize(args)
-        super(args)
-        self.exit_status = 0
-      end
-
       def run
         setup_environment
         run_basebackup
-        create_archive
-      ensure
-        cleanup_environment
-        exit self.exit_status
       end
 
       private
 
-      def run_basebackup
-        $stderr.puts "Creating basebackup: #{host}"
-        stdout, stderr, status = Open3.capture3(script_env, basebackup_command)
-        $stdout.print stdout
-        $stderr.print stderr
-        self.exit_status = status.exitstatus unless status.exitstatus.zero?
-      end
-
-      def create_archive
-        return unless self.exit_status.zero?
-        $stderr.puts "Archiving data directory: #{archive_file}"
-        Dir.chdir(temporary_directory) do
-          stdout, stderr, status = Open3.capture3(script_env, tar_command)
-          $stdout.print stdout
-          $stderr.print stderr
-          self.exit_status = status.exitstatus unless status.exitstatus.zero?
-        end
-      end
-
-      def cleanup_environment
-        FileUtils.rm_rf(temporary_directory)
-      end
-
-      def setup_environment
-        FileUtils.mkdir_p(temporary_directory)
-      end
-
-      def current_date
-        Time.now.strftime('%Y%m%d')
-      end
-
-      def archive_file
-        "#{directory}/#{name}.basebackup.#{current_date}.tar.gz"
-      end
+      # option wrappers
 
       def data_directory
         @options[:data_directory]
-      end
-
-      def absolute_data_directory
-        "#{temporary_directory}/#{data_directory}"
       end
 
       def directory
@@ -132,21 +86,35 @@ module Postmodern
         @options[:user]
       end
 
-      def basebackup_command
-        "pg_basebackup -X fetch --checkpoint=fast -D #{absolute_data_directory} -U #{user} -h #{host}"
-      end
+      # backup methods
 
       def archive_command
         return 'gzip -9' unless options[:pigz]
         "pigz -9 -p #{options[:concurrency]}"
       end
 
-      def tar_command
-        "tar -cf - #{data_directory} | #{archive_command} > #{archive_file}"
+      def archive_file
+        "#{directory}/#{name}.basebackup.#{current_date}.tar.gz"
       end
 
-      def temporary_directory
-        "#{directory}/.tmp/#{host}"
+      def basebackup_command
+        "pg_basebackup --checkpoint=fast -F tar -D - -U #{user} -h #{host} | #{archive_command} > #{archive_file}"
+      end
+
+      def current_date
+        Time.now.strftime('%Y%m%d')
+      end
+
+      def run_basebackup
+        $stderr.puts "Creating basebackup: #{host}"
+        stdout, stderr, status = Open3.capture3(script_env, basebackup_command)
+        $stdout.print stdout
+        $stderr.print stderr
+        exit status.exitstatus
+      end
+
+      def setup_environment
+        FileUtils.mkdir_p(directory)
       end
 
       def script_env
